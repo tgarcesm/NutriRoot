@@ -39,11 +39,18 @@
 <body>
   <a class="skip-link" href="#contenido-principal">Ir al contenido principal</a>
 
+  <div class="site-wrap">
+
 <header>
 <!-- NAV -->
-<nav aria-label="Navegación principal">
+<nav id="site-nav" class="site-nav" aria-label="Navegación principal">
   <a class="nav-logo" href="#hero">Nutri<span>Root</span></a>
-  <ul class="nav-links">
+  <button type="button" class="nav-toggle" id="nav-toggle" aria-controls="primary-navigation" aria-expanded="false" aria-label="Abrir menú de navegación">
+    <span class="nav-toggle__bar" aria-hidden="true"></span>
+    <span class="nav-toggle__bar" aria-hidden="true"></span>
+    <span class="nav-toggle__bar" aria-hidden="true"></span>
+  </button>
+  <ul class="nav-links" id="primary-navigation">
     <li><a href="#problema">Problema</a></li>
     <li><a href="#propuesta">Propuesta</a></li>
     <li><a href="#servicios">Servicios</a></li>
@@ -352,7 +359,7 @@
       <div class="red-tag">Retención · Accesibilidad · Comunidad</div>
     </div>
   </div>
-  <div style="margin-top:2rem;padding:1.5rem;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);">
+  <div class="marketing-extra" style="margin-top:2rem;padding:1.5rem;border-radius:16px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);">
     <p style="font-size:0.82rem;color:#888;line-height:1.75;">
       <strong style="color:var(--verde-claro);">Micro-influencers locales</strong> (5K–50K seguidores en Medellín) · 
       <strong style="color:var(--verde-claro);">Campus marketing</strong> en ferias universitarias · 
@@ -515,6 +522,9 @@
   <div>Nutrición + Tecnología + Comunidad</div>
 </footer>
 
+  </div>
+
+<!-- Pitch: fuera de .site-wrap para que overflow-x no recorte position:fixed (Chrome/Edge) -->
 <button type="button" class="pitch-fab" id="pitch-fab" aria-haspopup="dialog" aria-controls="pitch-modal">
   📊 Pitch
 </button>

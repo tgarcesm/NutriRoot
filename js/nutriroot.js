@@ -40,6 +40,70 @@
 (() => {
   'use strict';
 
+  const nav = document.getElementById('site-nav');
+  const toggle = document.getElementById('nav-toggle');
+  const links = document.getElementById('primary-navigation');
+  if (!nav || !toggle || !links) return;
+
+  const mq = window.matchMedia('(max-width: 900px)');
+  const labelOpen = 'Abrir menú de navegación';
+  const labelClose = 'Cerrar menú de navegación';
+
+  const open = () => {
+    nav.classList.add('is-open');
+    document.body.classList.add('nav-menu-open');
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', labelClose);
+    links.removeAttribute('aria-hidden');
+  };
+
+  const close = () => {
+    nav.classList.remove('is-open');
+    document.body.classList.remove('nav-menu-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', labelOpen);
+    if (mq.matches) {
+      links.setAttribute('aria-hidden', 'true');
+    } else {
+      links.removeAttribute('aria-hidden');
+    }
+  };
+
+  const syncMq = () => {
+    if (!mq.matches) {
+      close();
+      links.removeAttribute('aria-hidden');
+    } else if (!nav.classList.contains('is-open')) {
+      links.setAttribute('aria-hidden', 'true');
+    }
+  };
+
+  syncMq();
+  mq.addEventListener('change', syncMq);
+
+  toggle.addEventListener('click', () => {
+    if (!mq.matches) return;
+    if (nav.classList.contains('is-open')) close();
+    else open();
+  });
+
+  links.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener('click', () => {
+      if (mq.matches) close();
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !nav.classList.contains('is-open')) return;
+    const pitch = document.getElementById('pitch-modal');
+    if (pitch && !pitch.hasAttribute('hidden') && pitch.classList.contains('is-open')) return;
+    close();
+  });
+})();
+
+(() => {
+  'use strict';
+
   const modal = document.getElementById('pitch-modal');
   const fab = document.getElementById('pitch-fab');
   if (!modal || !fab) return;
@@ -64,8 +128,13 @@
     slides.forEach((slide, i) => {
       const active = i === current;
       slide.classList.toggle('is-active', active);
-      slide.toggleAttribute('hidden', !active);
-      slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+      if (active) {
+        slide.removeAttribute('hidden');
+        slide.setAttribute('aria-hidden', 'false');
+      } else {
+        slide.setAttribute('hidden', '');
+        slide.setAttribute('aria-hidden', 'true');
+      }
     });
     if (slideNumEl) {
       slideNumEl.textContent = String(current + 1);
@@ -77,6 +146,20 @@
   const openModal = () => {
     window.clearTimeout(closeTimer);
     closeTimer = null;
+    const nav = document.getElementById('site-nav');
+    if (nav && nav.classList.contains('is-open')) {
+      nav.classList.remove('is-open');
+      document.body.classList.remove('nav-menu-open');
+      const t = document.getElementById('nav-toggle');
+      if (t) {
+        t.setAttribute('aria-expanded', 'false');
+        t.setAttribute('aria-label', 'Abrir menú de navegación');
+      }
+      const links = document.getElementById('primary-navigation');
+      if (links && window.matchMedia('(max-width: 900px)').matches) {
+        links.setAttribute('aria-hidden', 'true');
+      }
+    }
     lastFocus = document.activeElement;
     modal.removeAttribute('hidden');
     modal.setAttribute('aria-hidden', 'false');
@@ -124,8 +207,8 @@
     });
   });
 
-  btnPrev?.addEventListener('click', () => setSlide(current - 1));
-  btnNext?.addEventListener('click', () => setSlide(current + 1));
+  if (btnPrev) btnPrev.addEventListener('click', () => setSlide(current - 1));
+  if (btnNext) btnNext.addEventListener('click', () => setSlide(current + 1));
 
   document.addEventListener('keydown', (e) => {
     if (modal.hasAttribute('hidden') || !modal.classList.contains('is-open')) return;
@@ -135,10 +218,12 @@
     }
   });
 
-  backdrop?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      closeModal();
-    }
-  });
+  if (backdrop) {
+    backdrop.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        closeModal();
+      }
+    });
+  }
 })();
