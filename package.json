@@ -1,0 +1,9 @@
+{
+  "name": "nutriroot",
+  "private": true,
+  "description": "Sitio estático NutriRoot.",
+  "scripts": {
+    "dev": "npx --yes serve@14 . -p 5173",
+    "start": "npx --yes serve@14 . -p 5173"
+  }
+}

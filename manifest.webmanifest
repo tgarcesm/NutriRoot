@@ -1,0 +1,20 @@
+{
+  "name": "NutriRoot",
+  "short_name": "NutriRoot",
+  "description": "Plataforma de bienestar nutricional para jóvenes en Colombia.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "browser",
+  "lang": "es-CO",
+  "dir": "ltr",
+  "background_color": "#F9F4EE",
+  "theme_color": "#2D6A4F",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
